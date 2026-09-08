@@ -40,7 +40,7 @@ metadata_path_for_target() {
 
 RELEASE_INPUTS=(.gitignore Makefile scripts media)
 for TARGET in "${TARGETS[@]}"; do
-  read -r PROJECT _ < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
+  IFS=$'\t' read -r PROJECT _ < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
   PROJECT="${PROJECT#$ROOT/}"
   add_release_input "$(dirname "$PROJECT")"
 done

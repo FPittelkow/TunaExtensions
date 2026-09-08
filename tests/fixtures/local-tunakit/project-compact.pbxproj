@@ -1,0 +1,7 @@
+// !$*UTF8*$!
+{
+	objectVersion = 77;
+	objects = {
+		AAAAAAAAAAAAAAAAAAAAAAAA /* XCRemoteSwiftPackageReference "TunaKit" */ = {requirement = { kind = exactVersion; version = 1.22.0; }; repositoryURL = "https://github.com/tunaformac/TunaKit"; isa = XCRemoteSwiftPackageReference; };
+	};
+}

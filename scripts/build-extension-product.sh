@@ -12,7 +12,7 @@ if [[ -z "$TARGET" || -z "$CONFIGURATION" ]]; then
   exit 64
 fi
 
-read -r PROJECT RESOLVED_TARGET < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
+IFS=$'\t' read -r PROJECT RESOLVED_TARGET < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
 
 BUILD_SETTINGS=()
 if [[ "$CONFIGURATION" == "Debug" ]]; then
@@ -27,9 +27,9 @@ fi
 
 run_build() {
   if [[ ${#BUILD_SETTINGS[@]} -gt 0 ]]; then
-    xcodebuild build "$@" "${BUILD_SETTINGS[@]}" >&2
+    "$ROOT/scripts/run-xcodebuild" build "$@" "${BUILD_SETTINGS[@]}" >&2
   else
-    xcodebuild build "$@" >&2
+    "$ROOT/scripts/run-xcodebuild" build "$@" >&2
   fi
 }
 
@@ -43,13 +43,13 @@ run_build \
 SETTINGS_FILE="$(mktemp)"
 trap 'rm -f "$SETTINGS_FILE"' EXIT
 
-xcodebuild \
+"$ROOT/scripts/run-xcodebuild" --output "$SETTINGS_FILE" -- \
   -project "$PROJECT" \
   -scheme "$RESOLVED_TARGET" \
   -configuration "$CONFIGURATION" \
   -destination "$DESTINATION" \
   -derivedDataPath "$DERIVED_DATA" \
-  -showBuildSettings > "$SETTINGS_FILE"
+  -showBuildSettings
 
 TARGET_BUILD_DIR="$(rg "^ *TARGET_BUILD_DIR" -m1 "$SETTINGS_FILE" | sed 's/.*= //')"
 FULL_PRODUCT_NAME="$(rg "^ *FULL_PRODUCT_NAME" -m1 "$SETTINGS_FILE" | sed 's/.*= //')"

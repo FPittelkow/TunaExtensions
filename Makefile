@@ -7,16 +7,17 @@ DEV_DESTINATION := platform=macOS,arch=$(ARCH)
 DERIVED_DATA := ./build/dd
 INSTALL_DIR := $(HOME)/Library/Application Support/Tuna/ExtensionsDev
 LOCAL_DERIVED_DATA := ./build/dd-local
+CONFIGURATION ?= Debug
 
 .DEFAULT_GOAL := build-all
-.PHONY: build-all test test-release-scripts test-extensions ext ext-all ext-local ext-all-local ext-package ext-upload release release-all clean
+.PHONY: build-all test test-release-scripts test-local-tunakit-rewrite test-extensions ext ext-all ext-local ext-all-local ext-package ext-upload release release-all clean
 
 define require_target
 	@test -n "$(TARGET)" || { echo "usage: make $@ TARGET=<Scheme>" >&2; exit 64; }
 endef
 
 define require_tuna_root
-	@test -n "$(TUNA_ROOT)" || { echo "usage: make $@ TARGET=<Scheme> TUNA_ROOT=/absolute/path/to/Tuna" >&2; exit 64; }
+	@test -n "$(TUNA_ROOT)" || { echo "usage: make $@ TUNA_ROOT=/absolute/path/to/Tuna" >&2; exit 64; }
 endef
 
 # Compile every extension in Release.
@@ -29,6 +30,12 @@ test: test-release-scripts test-extensions
 test-release-scripts:
 	@./tests/release-all-extensions-test.sh
 	@./tests/cross-repo-paths-test.sh
+	@./tests/run-xcodebuild-test.sh
+	@./tests/local-tunakit-rewrite-test.sh
+	@./tests/local-extension-tooling-test.sh
+
+test-local-tunakit-rewrite:
+	@./tests/local-tunakit-rewrite-test.sh
 
 test-extensions:
 	@set -e; found_tests=""; \
@@ -41,7 +48,7 @@ test-extensions:
 		SCHEME="$$(printf '%s\n' "$$RESOLVED" | cut -f2)"; \
 		./scripts/verify-test-scheme.sh "$$PBXPROJ" "$$PROJECT/xcshareddata/xcschemes/$$SCHEME.xcscheme"; \
 		echo "=== $$SCHEME tests ==="; \
-		xcodebuild test -project "$$PROJECT" -scheme "$$SCHEME" -configuration Debug -destination "$(DEV_DESTINATION)" -derivedDataPath "$(DERIVED_DATA)/tests/$$SCHEME" CODE_SIGNING_ALLOWED=NO; \
+		./scripts/run-xcodebuild test -project "$$PROJECT" -scheme "$$SCHEME" -configuration Debug -destination "$(DEV_DESTINATION)" -derivedDataPath "$(DERIVED_DATA)/tests/$$SCHEME" CODE_SIGNING_ALLOWED=NO; \
 	done; \
 	test -n "$$found_tests" || { echo "No extension unit-test targets found." >&2; exit 1; }; \
 	echo "All extension tests pass."
@@ -55,25 +62,21 @@ ext:
 ext-all:
 	@set -e; for SCHEME in $(EXTENSION_SCHEMES); do ./scripts/tuna-extension install --scheme "$$SCHEME"; done
 
-# Build one extension against Tuna's local TunaKit source and dev-install it.
+# Build selected extensions against Tuna's local TunaKit source and dev-install them. TARGET keeps
+# the original single-target interface; TARGETS accepts a space-separated subset.
 ext-local:
-	$(require_target)
 	$(require_tuna_root)
-	@set -e; \
-	./scripts/resolve-extension-scheme.sh "$(TARGET)" >/dev/null; \
-	PACKAGE="$$(./scripts/prepare-local-tunakit-package.sh "$(TUNA_ROOT)")"; \
-	TUNA_LOCAL_TUNAKIT_PACKAGE="$$PACKAGE" \
-	  ./scripts/install-local-extension-product.sh "$(TARGET)" "$(INSTALL_DIR)" "$(LOCAL_DERIVED_DATA)"
+	@test -n "$(strip $(TARGET) $(TARGETS))" || { echo "usage: make $@ TARGET=<Scheme> or TARGETS='<Scheme> ...' TUNA_ROOT=/absolute/path/to/Tuna [CONFIGURATION=Release]" >&2; exit 64; }
+	@./scripts/install-local-extensions.sh \
+	  "$(TUNA_ROOT)" "$(INSTALL_DIR)" "$(LOCAL_DERIVED_DATA)" "$(CONFIGURATION)" \
+	  $(strip $(TARGET) $(TARGETS))
 
 # Build every extension against Tuna's local TunaKit source and dev-install it.
 ext-all-local:
-	@test -n "$(TUNA_ROOT)" || { echo "usage: make $@ TUNA_ROOT=/absolute/path/to/Tuna" >&2; exit 64; }
-	@set -e; \
-	PACKAGE="$$(./scripts/prepare-local-tunakit-package.sh "$(TUNA_ROOT)")"; \
-	for SCHEME in $(EXTENSION_SCHEMES); do \
-	  TUNA_LOCAL_TUNAKIT_PACKAGE="$$PACKAGE" \
-	    ./scripts/install-local-extension-product.sh "$$SCHEME" "$(INSTALL_DIR)" "$(LOCAL_DERIVED_DATA)"; \
-	done
+	$(require_tuna_root)
+	@./scripts/install-local-extensions.sh \
+	  "$(TUNA_ROOT)" "$(INSTALL_DIR)" "$(LOCAL_DERIVED_DATA)" "$(CONFIGURATION)" \
+	  $(EXTENSION_SCHEMES)
 
 # Build + package one extension as a .tunaextension store artifact.
 # Needs a Tuna binary for the declaration dump: /Applications/Tuna.app or TUNA_BINARY.

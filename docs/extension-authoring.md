@@ -52,6 +52,12 @@ extension as a top-level `<Name>Extension` directory and add its project to
 `TunaExtensions.xcworkspace`. Pin TunaKit consistently with the other projects and use the shared
 repository scripts for building, testing, installation, and packaging.
 
+Local TunaKit builds copy an extension before changing it, leaving its checked-in project and
+`Package.resolved` untouched. The copy must contain exactly one standard TunaKit remote package
+reference and one TunaKit pin in a `Package.resolved` version 1, 2, or 3 file. The rewrite preserves
+the pin's semantic version while pointing its temporary URL and revision at the local package;
+unexpected or ambiguous forms fail before Xcode runs.
+
 Do not preserve copied catalog, provider, connection, or navigation machinery merely because it was
 present in the example. The approved design determines the implementation; the example only supplies
 known-good project wiring and a relevant API recipe.
@@ -112,6 +118,22 @@ Run the shared tooling from the repository root:
 ./scripts/tuna-extension logs --last 20m       # inspect extension loading
 make test                                      # run repository checks and extension tests
 ```
+
+For coordinated work against an unreleased TunaKit checkout, use the local install path. Exact
+schemes and short names are accepted, and a selected subset shares one TunaKit preparation:
+
+```bash
+make ext-local TARGETS="MyMind Safari" TUNA_ROOT=/absolute/path/to/Tuna
+make ext-local TARGET=MyMind TUNA_ROOT=/absolute/path/to/Tuna CONFIGURATION=Release
+```
+
+Local Release builds intentionally use only the host architecture, matching the generated TunaKit
+framework. Published release/package commands remain universal and use released TunaKit.
+
+The shared build and test commands route Xcode through `scripts/run-xcodebuild`. Complete output is
+retained in `build/xcodebuild`; builds and tests use `xcsift` when available and report the first
+compiler errors plus the log path on failure. Use `make test-release-scripts` when changing only
+repository tooling, and `make test-extensions` when validating extension test targets.
 
 Before opening a pull request, build and test the extension, document setup and privacy behavior,
 and add focused tests. Maintainers use the repository release tooling for packaging and publication;

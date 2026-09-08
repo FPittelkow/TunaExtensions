@@ -34,7 +34,7 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 
 RELEASE_COMMIT="$(git -C "$ROOT" rev-parse HEAD)"
-read -r PROJECT RESOLVED_TARGET < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
+IFS=$'\t' read -r PROJECT RESOLVED_TARGET < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
 PROJECT="${PROJECT#$ROOT/}"
 EXTENSION_DIR="$(dirname "$PROJECT")"
 RELEASE_INPUTS=("$EXTENSION_DIR" .gitignore Makefile scripts media)

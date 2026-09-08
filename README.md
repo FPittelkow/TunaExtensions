@@ -58,15 +58,29 @@ make                  # compile every extension (Release)
 make test             # run every extension unit-test target
 make ext-all          # build + install all into Tuna's ExtensionsDev for local development
 make ext-all-local TUNA_ROOT=/absolute/path/to/Tuna
-make ext-local TARGET=SafariExtension TUNA_ROOT=/absolute/path/to/Tuna
+make ext-local TARGET=Safari TUNA_ROOT=/absolute/path/to/Tuna
+make ext-local TARGETS="MyMind Safari" TUNA_ROOT=/absolute/path/to/Tuna
+make ext-local TARGET=MyMind TUNA_ROOT=/absolute/path/to/Tuna CONFIGURATION=Release
 ./scripts/tuna-extension install --scheme ObsidianExtension
 ```
 
 Open `TunaExtensions.xcworkspace` for Xcode work. After a dev install, restart Tuna to load changed
 extension code. `ext-local` and `ext-all-local` create an ignored, temporary binary package from
 the selected Tuna checkout without changing the projects or their checked-in package resolutions.
+Targets accept exact schemes or short extension names; `GitHub` and `GitHubExtension` retain the
+load-bearing `TunaGitHub` scheme. `TARGETS` validates the full subset before preparing TunaKit once.
+Local Debug and Release builds use the host architecture to match the generated framework.
+
+The temporary dependency rewrite accepts `Package.resolved` formats 1–3, preserves each project's
+resolved TunaKit version when pins differ, and requires exactly one recognized TunaKit project
+reference and resolved pin. Unexpected or ambiguous forms fail before Xcode runs.
 The release-backed `ext`, build, test, package, upload, and release commands continue to use the
 published TunaKit package.
+
+Shared commands retain complete Xcode output under `build/xcodebuild` while keeping terminal output
+concise. If `xcsift` is installed it formats live build/test diagnostics; failures also print the
+first compiler errors and retained log path. Run `make test-release-scripts` for tooling-only
+changes, `make test-extensions` for extension tests, or `make test` for both.
 
 ## TunaKit dependency
 

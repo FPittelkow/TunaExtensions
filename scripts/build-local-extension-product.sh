@@ -19,7 +19,7 @@ fi
 mkdir -p "$DERIVED_DATA"
 DERIVED_DATA="$(cd "$DERIVED_DATA" && pwd)"
 
-read -r source_project resolved_target < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
+IFS=$'\t' read -r source_project resolved_target < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
 source_directory="$(dirname "$source_project")"
 temporary_directory="$(mktemp -d "${TMPDIR:-/tmp}/tuna-local-extension.XXXXXX")"
 cleanup() {
@@ -34,26 +34,24 @@ temporary_source="$temporary_directory/$(basename "$source_directory")"
 ditto "$source_directory" "$temporary_source"
 package_url="file://$LOCAL_PACKAGE"
 local_revision="$(git -C "$LOCAL_PACKAGE" rev-parse HEAD)"
-local_version="$(git -C "$LOCAL_PACKAGE" tag --sort=-v:refname | head -n 1)"
-if [[ -z "$local_version" ]]; then
-  echo "Prepared local TunaKit package has no version tag." >&2
+resolved_files=()
+while IFS= read -r -d '' resolved_file; do
+  resolved_files+=("$resolved_file")
+done < <(find "$temporary_source" -path '*/xcshareddata/swiftpm/Package.resolved' -print0)
+if [[ ${#resolved_files[@]} -ne 1 ]]; then
+  echo "Expected exactly one Package.resolved for $source_project, found ${#resolved_files[@]}." >&2
   exit 1
 fi
-while IFS= read -r -d '' resolved_file; do
-  jq --arg location "$package_url" --arg revision "$local_revision" --arg version "$local_version" \
-    '(.pins[] | select(.identity == "tunakit")) |= (.location = $location | .state = {revision: $revision, version: $version})' \
-    "$resolved_file" > "$resolved_file.local"
-  mv "$resolved_file.local" "$resolved_file"
-done < <(find "$temporary_source" -path '*/xcshareddata/swiftpm/Package.resolved' -print0)
 project="$temporary_source/$(basename "$source_project")"
-TUNA_LOCAL_PACKAGE_URL="$package_url" perl -0pi -e \
-  's{repositoryURL = "https://github\.com/tunaformac/TunaKit";}{repositoryURL = "$ENV{TUNA_LOCAL_PACKAGE_URL}";}g' \
-  "$project/project.pbxproj"
+"$ROOT/scripts/rewrite-local-tunakit-references.py" rewrite \
+  --project "$project/project.pbxproj" \
+  --resolved "${resolved_files[0]}" \
+  --package-url "$package_url" \
+  --revision "$local_revision"
 
-build_settings=()
-if [[ "$CONFIGURATION" == "Debug" ]]; then
-  build_settings+=(ONLY_ACTIVE_ARCH=YES)
-fi
+# The prepared TunaKit xcframework contains the current host architecture. Keep local builds on
+# that same architecture in every configuration, including Release validation.
+build_settings=(ONLY_ACTIVE_ARCH=YES)
 if [[ -n "${TUNA_DEVELOPMENT_TEAM:-}" ]]; then
   build_settings+=(DEVELOPMENT_TEAM="$TUNA_DEVELOPMENT_TEAM")
 fi
@@ -65,14 +63,14 @@ fi
 # that intentionally mutable development tag when its workspace still records the old SHA.
 rm -rf "$DERIVED_DATA/SourcePackages"
 
-xcodebuild -resolvePackageDependencies \
+"$ROOT/scripts/run-xcodebuild" -resolvePackageDependencies \
   -project "$project" \
   -scheme "$resolved_target" \
   -clonedSourcePackagesDirPath "$DERIVED_DATA/SourcePackages" \
   -disablePackageRepositoryCache \
   -scmProvider system >&2
 
-xcodebuild build \
+"$ROOT/scripts/run-xcodebuild" build \
   -project "$project" \
   -scheme "$resolved_target" \
   -configuration "$CONFIGURATION" \
@@ -85,7 +83,7 @@ xcodebuild build \
 
 settings_file="$(mktemp)"
 trap 'rm -f "$settings_file"; cleanup' EXIT
-xcodebuild \
+"$ROOT/scripts/run-xcodebuild" --output "$settings_file" -- \
   -project "$project" \
   -scheme "$resolved_target" \
   -configuration "$CONFIGURATION" \
@@ -94,7 +92,7 @@ xcodebuild \
   -clonedSourcePackagesDirPath "$DERIVED_DATA/SourcePackages" \
   -disablePackageRepositoryCache \
   -scmProvider system \
-  -showBuildSettings > "$settings_file"
+  -showBuildSettings
 
 target_build_dir="$(rg '^ *TARGET_BUILD_DIR' -m1 "$settings_file" | sed 's/.*= //')"
 full_product_name="$(rg '^ *FULL_PRODUCT_NAME' -m1 "$settings_file" | sed 's/.*= //')"

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/tuna-release-all-test.XXXXXX")"
+SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/tuna release all test.XXXXXX")"
 
 cleanup() {
   /bin/rm -rf "$SANDBOX"

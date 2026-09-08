@@ -10,7 +10,7 @@ fi
 
 list_schemes() {
   local project="$1"
-  xcodebuild -list -project "$project" 2>/dev/null \
+  "$ROOT/scripts/run-xcodebuild" --output - -- -list -project "$project" 2>/dev/null \
     | awk '/Schemes:/ {flag=1; next} flag && NF {print $1} flag && !NF {exit}'
 }
 
@@ -50,6 +50,7 @@ elif [[ "$TARGET" == Tuna* ]]; then
     add_candidate "${bare%Actions}Extension"
   fi
 else
+  add_candidate "${TARGET}Extension"
   add_candidate "Tuna$TARGET"
 fi
 
