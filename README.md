@@ -50,6 +50,7 @@ below rather than a generic template, and include the new project in `TunaExtens
 | PoofExtension | Find, paste, and manage Poof text snippets |
 | RemindersExtension | Search reminders and create them in specific lists |
 | SafariExtension | Safari bookmarks, reading list, and tabs |
+| SpotifyExtension | Control Spotify, browse your library, and search Spotify |
 | ThingsExtension | Things to-dos and projects |
 
 ## Building
