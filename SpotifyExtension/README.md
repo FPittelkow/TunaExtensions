@@ -12,4 +12,4 @@ Spotify Web API access is used for search, library browsing, saves, queueing, an
 
 Spotify development-mode apps only expose playlist contents for playlists the connected user owns or collaborates on. Search can still find other playlists for playback or opening in Spotify, but Tuna only browses owned and collaborative playlists from Your Library.
 
-The shared Spotify application is currently limited to five explicitly allowlisted users. Public distribution requires Spotify Extended Quota approval.
+> **Approval status:** We’ve applied for Spotify Extended Quota and are waiting for approval. Until then, the shared Spotify application is limited to five explicitly allowlisted users.
