@@ -37,7 +37,12 @@ RELEASE_COMMIT="$(git -C "$ROOT" rev-parse HEAD)"
 IFS=$'\t' read -r PROJECT RESOLVED_TARGET < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
 PROJECT="${PROJECT#$ROOT/}"
 EXTENSION_DIR="$(dirname "$PROJECT")"
-RELEASE_INPUTS=("$EXTENSION_DIR" .gitignore Makefile scripts media)
+SOURCE_INPUTS=("$EXTENSION_DIR")
+SHARED_PACKAGE="$("$ROOT/scripts/extension-shared-package.sh" "$ROOT/$PROJECT")"
+if [[ -n "$SHARED_PACKAGE" ]]; then
+  SOURCE_INPUTS+=("$SHARED_PACKAGE")
+fi
+RELEASE_INPUTS=("${SOURCE_INPUTS[@]}" .gitignore Makefile scripts media)
 ensure_paths_committed "$ROOT" "${RELEASE_INPUTS[@]}"
 ensure_head_unchanged "$ROOT" "$RELEASE_COMMIT"
 
@@ -791,7 +796,7 @@ extension_source_matches_release_tag() {
   [[ -n "$TAG" ]] || return 1
   git -C "$ROOT" show-ref --verify --quiet "refs/tags/$TAG" || return 1
   [[ "$(git -C "$ROOT" cat-file -t "$TAG")" == "tag" ]] || return 1
-  git -C "$ROOT" diff --quiet "${TAG}^{commit}" HEAD -- "$EXTENSION_DIR"
+  git -C "$ROOT" diff --quiet "${TAG}^{commit}" HEAD -- "${SOURCE_INPUTS[@]}"
 }
 
 write_upload_auth_config() {

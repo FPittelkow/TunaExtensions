@@ -23,7 +23,7 @@ and destructive actions should match your mental model before code makes them ex
 - `rg` (the repository scripts use ripgrep)
 - Network access for the released [TunaKit](https://github.com/tunaformac/TunaKit) package
 
-TunaKit is public beta. This repository currently pins `1.21.x`; always confirm the current pin in
+TunaKit is public beta. This repository currently pins `1.22.x`; always confirm the current pin in
 the extension projects and read the TunaKit changelog before raising it. Claim only compatibility
 floors you test.
 
@@ -61,6 +61,11 @@ unexpected or ambiguous forms fail before Xcode runs.
 Do not preserve copied catalog, provider, connection, or navigation machinery merely because it was
 present in the example. The approved design determines the implementation; the example only supplies
 known-good project wiring and a relevant API recipe.
+
+Chromium-based browser extensions are separate products but may reference the repository's
+Foundation-only `ChromiumExtensionSupport` package for verified profile, bookmark, and launch
+contracts. Keep browser-specific declarations, catalogs, actions, branding, and capabilities in
+the owning extension; do not use that package as a browser-neutral abstraction for Safari or Firefox.
 
 ## Current shape and recipe index
 

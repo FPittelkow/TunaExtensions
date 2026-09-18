@@ -8,6 +8,9 @@
       location = "group:BrewExtension/BrewExtension.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:ChromeExtension/ChromeExtension.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:CleanShotExtension/CleanShotExtension.xcodeproj">
    </FileRef>
    <FileRef

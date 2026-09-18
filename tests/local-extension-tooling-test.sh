@@ -173,10 +173,12 @@ mkdir -p \
   "$SANDBOX/build/bin" \
   "$SANDBOX/build/SourceExtension/Source.xcodeproj" \
   "$SANDBOX/build/SourceExtension/Source.xcodeproj/project.xcworkspace/xcshareddata/swiftpm" \
+  "$SANDBOX/build/ChromiumExtensionSupport/Sources" \
   "$SANDBOX/build/local-package/TunaKit.xcframework"
 cp \
   "$ROOT/scripts/build-extension-product.sh" \
   "$ROOT/scripts/build-local-extension-product.sh" \
+  "$ROOT/scripts/extension-shared-package.sh" \
   "$ROOT/scripts/rewrite-local-tunakit-references.py" \
   "$ROOT/scripts/run-xcodebuild" \
   "$SANDBOX/build/scripts/"
@@ -188,21 +190,48 @@ cp "$ROOT/tests/fixtures/local-tunakit/project-multiline.pbxproj" \
   "$SANDBOX/build/SourceExtension/Source.xcodeproj/project.pbxproj"
 cp "$ROOT/tests/fixtures/local-tunakit/package-v3.resolved" \
   "$SANDBOX/build/SourceExtension/Source.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+printf '// shared package\n' >"$SANDBOX/build/ChromiumExtensionSupport/Package.swift"
+printf '// shared source\n' >"$SANDBOX/build/ChromiumExtensionSupport/Sources/Browser.swift"
+python3 - "$SANDBOX/build/SourceExtension/Source.xcodeproj/project.pbxproj" <<'PY'
+from pathlib import Path
+import sys
+
+project = Path(sys.argv[1])
+project.write_text(project.read_text().replace("objects = {", '''objects = {
+    /* isa = XCLocalSwiftPackageReference; relativePath = ../ChromiumExtensionSupport; */
+    FILE = { isa = PBXFileReference; relativePath = "../ChromiumExtensionSupport"; };
+    LOCAL = { isa = XCLocalSwiftPackageReference; relativePath = ../Other; };
+'''))
+PY
 cat >"$SANDBOX/build/bin/xcodebuild" <<'EOF'
 #!/usr/bin/env bash
+set -euo pipefail
 printf '%s\n' "$*" >>"$XCODEBUILD_LOG"
 configuration=Debug
 derived_data=""
+project=""
 show_settings=false
 previous=""
 for argument in "$@"; do
   case "$previous" in
+    -project) project="$argument" ;;
     -configuration) configuration="$argument" ;;
     -derivedDataPath) derived_data="$argument" ;;
   esac
   [[ "$argument" == "-showBuildSettings" ]] && show_settings=true
   previous="$argument"
 done
+if [[ -n "${EXPECT_SHARED_PACKAGE:-}" ]]; then
+  shared_package="$(dirname "$(dirname "$project")")/ChromiumExtensionSupport"
+  if [[ "$EXPECT_SHARED_PACKAGE" == "1" ]]; then
+    [[ "$shared_package" != "$SHARED_PACKAGE_SOURCE" ]]
+    cmp "$SHARED_PACKAGE_SOURCE/Package.swift" "$shared_package/Package.swift"
+    cmp "$SHARED_PACKAGE_SOURCE/Sources/Browser.swift" "$shared_package/Sources/Browser.swift"
+  else
+    [[ ! -e "$shared_package" ]]
+  fi
+  printf '%s\n' "$project" >"$LOCAL_PROJECT_PATH_FILE"
+fi
 if [[ "$1" == "build" ]]; then
   mkdir -p "$derived_data/Build/Products/$configuration/Fake.appex"
 fi
@@ -227,11 +256,43 @@ git -C "$SANDBOX/build/local-package" tag 1.22.0
 
 PATH="$SANDBOX/build/bin:$PATH" \
 XCODEBUILD_LOG="$SANDBOX/build/xcodebuild.log" \
+EXPECT_SHARED_PACKAGE=0 \
+LOCAL_PROJECT_PATH_FILE="$SANDBOX/build/local-project-path" \
 TUNA_LOCAL_TUNAKIT_PACKAGE="$SANDBOX/build/local-package" \
   "$SANDBOX/build/scripts/build-local-extension-product.sh" \
     Source Release "platform=macOS,arch=$(uname -m)" "$SANDBOX/build/derived" >/dev/null
 rg -q '^build .* -configuration Release .* ONLY_ACTIVE_ARCH=YES$' "$SANDBOX/build/xcodebuild.log" ||
   fail "Local Release build did not set ONLY_ACTIVE_ARCH=YES."
+
+# Both quoted and unquoted project-local package paths must survive the isolated build.
+for package_path in '../ChromiumExtensionSupport' '"../ChromiumExtensionSupport"'; do
+  python3 - "$SANDBOX/build/SourceExtension/Source.xcodeproj/project.pbxproj" "$package_path" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+project = Path(sys.argv[1])
+project.write_text(re.sub(
+    r'(LOCAL = \{ isa = XCLocalSwiftPackageReference; relativePath = )[^;]+',
+    lambda match: match[1] + sys.argv[2],
+    project.read_text(),
+))
+PY
+  cp "$SANDBOX/build/SourceExtension/Source.xcodeproj/project.pbxproj" "$SANDBOX/build/original.pbxproj"
+  PATH="$SANDBOX/build/bin:$PATH" \
+  XCODEBUILD_LOG="$SANDBOX/build/xcodebuild.log" \
+  EXPECT_SHARED_PACKAGE=1 \
+  SHARED_PACKAGE_SOURCE="$SANDBOX/build/ChromiumExtensionSupport" \
+  LOCAL_PROJECT_PATH_FILE="$SANDBOX/build/local-project-path" \
+  TUNA_LOCAL_TUNAKIT_PACKAGE="$SANDBOX/build/local-package" \
+    /bin/bash "$SANDBOX/build/scripts/build-local-extension-product.sh" \
+      Source Release "platform=macOS,arch=$(uname -m)" "$SANDBOX/build/derived" >/dev/null
+  cmp "$SANDBOX/build/original.pbxproj" "$SANDBOX/build/SourceExtension/Source.xcodeproj/project.pbxproj" ||
+    fail "Local build modified the source project."
+  temporary_project="$(cat "$SANDBOX/build/local-project-path")"
+  [[ ! -e "$(dirname "$(dirname "$temporary_project")")" ]] ||
+    fail "Local build did not clean up its temporary root."
+done
 
 # Exercise the normal Release path under macOS's Bash 3.2 with no optional signing settings. This
 # also verifies tab-delimited resolver output when the project path contains spaces.

@@ -32,6 +32,10 @@ trap 'exit 143' TERM
 
 temporary_source="$temporary_directory/$(basename "$source_directory")"
 ditto "$source_directory" "$temporary_source"
+shared_package="$("$ROOT/scripts/extension-shared-package.sh" "$source_project")"
+if [[ -n "$shared_package" ]]; then
+  ditto "$ROOT/$shared_package" "$temporary_directory/$shared_package"
+fi
 package_url="file://$LOCAL_PACKAGE"
 local_revision="$(git -C "$LOCAL_PACKAGE" rev-parse HEAD)"
 resolved_files=()

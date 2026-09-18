@@ -1,7 +1,7 @@
 ARCH := $(shell uname -m)
 # One scheme per extension project. GitHubExtension's target kept its
 # load-bearing TunaGitHub name; resolve-extension-scheme maps either spelling.
-EXTENSION_SCHEMES := ArenaExtension BrewExtension CleanShotExtension FancyTextExtension TunaGitHub GiphyExtension Messages2FAExtension MusicExtension MyMindExtension NotesExtension NotionExtension ObsidianExtension PoofExtension RemindersExtension SafariExtension ThingsExtension
+EXTENSION_SCHEMES := ArenaExtension BrewExtension ChromeExtension CleanShotExtension FancyTextExtension TunaGitHub GiphyExtension Messages2FAExtension MusicExtension MyMindExtension NotesExtension NotionExtension ObsidianExtension PoofExtension RemindersExtension SafariExtension ThingsExtension
 DESTINATION := generic/platform=macOS
 DEV_DESTINATION := platform=macOS,arch=$(ARCH)
 DERIVED_DATA := ./build/dd
@@ -10,7 +10,7 @@ LOCAL_DERIVED_DATA := ./build/dd-local
 CONFIGURATION ?= Debug
 
 .DEFAULT_GOAL := build-all
-.PHONY: build-all test test-release-scripts test-local-tunakit-rewrite test-extensions ext ext-all ext-local ext-all-local ext-package ext-upload release release-all clean
+.PHONY: build-all test test-release-scripts test-local-tunakit-rewrite test-chromium-support test-extensions ext ext-all ext-local ext-all-local ext-package ext-upload release release-all clean
 
 define require_target
 	@test -n "$(TARGET)" || { echo "usage: make $@ TARGET=<Scheme>" >&2; exit 64; }
@@ -25,7 +25,7 @@ build-all:
 	@set -e; for SCHEME in $(EXTENSION_SCHEMES); do echo "=== $$SCHEME ==="; ./scripts/tuna-extension build --scheme "$$SCHEME" --release >/dev/null; done; echo "All extensions build."
 
 # Run release tooling regressions and every extension unit-test target.
-test: test-release-scripts test-extensions
+test: test-release-scripts test-chromium-support test-extensions
 
 test-release-scripts:
 	@./tests/release-all-extensions-test.sh
@@ -36,6 +36,9 @@ test-release-scripts:
 
 test-local-tunakit-rewrite:
 	@./tests/local-tunakit-rewrite-test.sh
+
+test-chromium-support:
+	@swift test --package-path ChromiumExtensionSupport
 
 test-extensions:
 	@set -e; found_tests=""; \

@@ -36,6 +36,7 @@ below rather than a generic template, and include the new project in `TunaExtens
 | --- | --- |
 | ArenaExtension | Browse Are.na channels and save links or text |
 | BrewExtension | Search and manage Homebrew packages |
+| ChromeExtension | Browse Chrome bookmarks and launch profiles |
 | CleanShotExtension | Browse recent CleanShot images and run capture commands |
 | FancyTextExtension | Turn text into searchable Unicode styles |
 | GitHubExtension | Repos, issues, and pull requests |
@@ -67,6 +68,8 @@ make ext-local TARGET=MyMind TUNA_ROOT=/absolute/path/to/Tuna CONFIGURATION=Rele
 Open `TunaExtensions.xcworkspace` for Xcode work. After a dev install, restart Tuna to load changed
 extension code. `ext-local` and `ext-all-local` create an ignored, temporary binary package from
 the selected Tuna checkout without changing the projects or their checked-in package resolutions.
+Chromium-based browser extensions share their storage and launch primitives through the local,
+Foundation-only `ChromiumExtensionSupport` package while remaining separate store extensions.
 Targets accept exact schemes or short extension names; `GitHub` and `GitHubExtension` retain the
 load-bearing `TunaGitHub` scheme. `TARGETS` validates the full subset before preparing TunaKit once.
 Local Debug and Release builds use the host architecture to match the generated framework.

@@ -43,6 +43,10 @@ for TARGET in "${TARGETS[@]}"; do
   IFS=$'\t' read -r PROJECT _ < <("$ROOT/scripts/resolve-extension-scheme.sh" "$TARGET")
   PROJECT="${PROJECT#$ROOT/}"
   add_release_input "$(dirname "$PROJECT")"
+  SHARED_PACKAGE="$("$ROOT/scripts/extension-shared-package.sh" "$ROOT/$PROJECT")"
+  if [[ -n "$SHARED_PACKAGE" ]]; then
+    add_release_input "$SHARED_PACKAGE"
+  fi
 done
 
 # Package resolution files can live outside an extension directory (for
