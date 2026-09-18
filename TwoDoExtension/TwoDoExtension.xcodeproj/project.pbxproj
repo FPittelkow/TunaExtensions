@@ -1,0 +1,465 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17CE3B2F6902D09550E6706E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC99F524E15405A51BE204F5 /* Cocoa.framework */; };
+		20F90F4B447A46F550A3DA40 /* TunaTwoDo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 613FBACA7DE1778A02741E64 /* TunaTwoDo.framework */; };
+		98AABFC894E6778F6DD17A3C /* TwoDoActionsCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5512545DF5E118A40C8FE7 /* TwoDoActionsCatalog.swift */; };
+		9C9912B37CB6481ACB6952CF /* TwoDoExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8839B4F9CDD2306C3C7E2A /* TwoDoExtensionTests.swift */; };
+		C704890D305BB8580087B5EB /* TunaKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9BA4A602462C1523A04F8884 /* TunaKit */; };
+		C704890E305BB8580087B5EB /* TunaKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5A69727CA338FD72DB6DB510 /* TunaKit */; };
+		D8CC54BF7852456785ED1DE8 /* TwoDoCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F83ADE36CFEAF5159D55219 /* TwoDoCatalog.swift */; };
+		F097455024A3DEB734F620ED /* TwoDoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE9260CF93A079A3D6B00AF /* TwoDoExtension.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1241936D4DD3AAD68FE7BFBD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244210E48437B6556980A702 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 51E5D284CF436B6BC66518C1;
+			remoteInfo = TwoDoExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4C5512545DF5E118A40C8FE7 /* TwoDoActionsCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoDoActionsCatalog.swift; sourceTree = "<group>"; };
+		5E8839B4F9CDD2306C3C7E2A /* TwoDoExtensionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TwoDoExtensionTests.swift; sourceTree = "<group>"; };
+		613FBACA7DE1778A02741E64 /* TunaTwoDo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TunaTwoDo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8EE9260CF93A079A3D6B00AF /* TwoDoExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoDoExtension.swift; sourceTree = "<group>"; };
+		8F83ADE36CFEAF5159D55219 /* TwoDoCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoDoCatalog.swift; sourceTree = "<group>"; };
+		AC99F524E15405A51BE204F5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DB4ABA3CE6D4C4F1FC08BE48 /* TwoDoExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwoDoExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED0D66632045D5ABA4DB76AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3A90DD66D505102FFDCF5E6C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C704890E305BB8580087B5EB /* TunaKit in Frameworks */,
+				17CE3B2F6902D09550E6706E /* Cocoa.framework in Frameworks */,
+				20F90F4B447A46F550A3DA40 /* TunaTwoDo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A8939BAB89F4E68C14042378 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C704890D305BB8580087B5EB /* TunaKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0035FE99EA2940F7FA633A58 = {
+			isa = PBXGroup;
+			children = (
+				26528A5FC3CFAE9924D0FA33 /* . */,
+				5BAB63C60BF318DAB40A4F04 /* Products */,
+				81DE57EA541F9E69F763C4E6 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		26528A5FC3CFAE9924D0FA33 /* . */ = {
+			isa = PBXGroup;
+			children = (
+				8EE9260CF93A079A3D6B00AF /* TwoDoExtension.swift */,
+				8F83ADE36CFEAF5159D55219 /* TwoDoCatalog.swift */,
+				4C5512545DF5E118A40C8FE7 /* TwoDoActionsCatalog.swift */,
+				ED0D66632045D5ABA4DB76AA /* Info.plist */,
+				5E8839B4F9CDD2306C3C7E2A /* TwoDoExtensionTests.swift */,
+			);
+			path = .;
+			sourceTree = "<group>";
+		};
+		5BAB63C60BF318DAB40A4F04 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				613FBACA7DE1778A02741E64 /* TunaTwoDo.framework */,
+				DB4ABA3CE6D4C4F1FC08BE48 /* TwoDoExtensionTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		81DE57EA541F9E69F763C4E6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F3D73BA78A987B3A34EE5B6D /* macOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F3D73BA78A987B3A34EE5B6D /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				AC99F524E15405A51BE204F5 /* Cocoa.framework */,
+			);
+			name = macOS;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		51E5D284CF436B6BC66518C1 /* TwoDoExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2FFB845B381A1C45B5E858FD /* Build configuration list for PBXNativeTarget "TwoDoExtension" */;
+			buildPhases = (
+				E709C50EE47329087239CBB0 /* Sources */,
+				A8939BAB89F4E68C14042378 /* Frameworks */,
+				F7058537B177352892A4D747 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TwoDoExtension;
+			packageProductDependencies = (
+				9BA4A602462C1523A04F8884 /* TunaKit */,
+			);
+			productName = TunaTwoDo;
+			productReference = 613FBACA7DE1778A02741E64 /* TunaTwoDo.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		77F983CE7894CC5467033F22 /* TwoDoExtensionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D53E3E9ACC4A68D0AF80C293 /* Build configuration list for PBXNativeTarget "TwoDoExtensionTests" */;
+			buildPhases = (
+				D9B67CF581EBCFCDC7492146 /* Sources */,
+				3A90DD66D505102FFDCF5E6C /* Frameworks */,
+				78976B8CA65F47EF8790858B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8CE3E71EF8635D2BF27913BB /* PBXTargetDependency */,
+			);
+			name = TwoDoExtensionTests;
+			packageProductDependencies = (
+				5A69727CA338FD72DB6DB510 /* TunaKit */,
+			);
+			productName = TwoDoExtensionTests;
+			productReference = DB4ABA3CE6D4C4F1FC08BE48 /* TwoDoExtensionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		244210E48437B6556980A702 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					51E5D284CF436B6BC66518C1 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = B9ABE98976E4D743F848F441 /* Build configuration list for PBXProject "TwoDoExtension" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 0035FE99EA2940F7FA633A58;
+			packageReferences = (
+				4ACDDB9BAD1ADEB613E8F8CA /* XCRemoteSwiftPackageReference "TunaKit" */,
+			);
+			productRefGroup = 5BAB63C60BF318DAB40A4F04 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				51E5D284CF436B6BC66518C1 /* TwoDoExtension */,
+				77F983CE7894CC5467033F22 /* TwoDoExtensionTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		78976B8CA65F47EF8790858B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F7058537B177352892A4D747 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D9B67CF581EBCFCDC7492146 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C9912B37CB6481ACB6952CF /* TwoDoExtensionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E709C50EE47329087239CBB0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F097455024A3DEB734F620ED /* TwoDoExtension.swift in Sources */,
+				D8CC54BF7852456785ED1DE8 /* TwoDoCatalog.swift in Sources */,
+				98AABFC894E6778F6DD17A3C /* TwoDoActionsCatalog.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8CE3E71EF8635D2BF27913BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TwoDoExtension;
+			target = 51E5D284CF436B6BC66518C1 /* TwoDoExtension */;
+			targetProxy = 1241936D4DD3AAD68FE7BFBD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1E7BB7F4E175EF3ADBE1A32A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S2C83JHY94;
+				PRODUCT_NAME = TunaTwoDo;
+			};
+			name = Debug;
+		};
+		2B4D74C106DB8AC4F18162A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = DDB8SQMXS9;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brnbw.tuna.plugins.twodo;
+				PRODUCT_MODULE_NAME = TunaTwoDo;
+				PRODUCT_NAME = TunaTwoDo;
+				SKIP_INSTALL = NO;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 6;
+			};
+			name = Debug;
+		};
+		3071DE6A5092D821EC0F5645 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S2C83JHY94;
+				PRODUCT_NAME = TunaTwoDo;
+			};
+			name = Release;
+		};
+		66FEFDFA35BD15244825D7EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brnbw.TwoDoExtensionTests;
+				PRODUCT_MODULE_NAME = TwoDoExtensionTests;
+				PRODUCT_NAME = TwoDoExtensionTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7840999097DA131C5F0BF8F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = DDB8SQMXS9;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brnbw.tuna.plugins.twodo;
+				PRODUCT_MODULE_NAME = TunaTwoDo;
+				PRODUCT_NAME = TunaTwoDo;
+				SKIP_INSTALL = NO;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 6;
+			};
+			name = Release;
+		};
+		AC7942F17590C98026360BC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brnbw.TwoDoExtensionTests;
+				PRODUCT_MODULE_NAME = TwoDoExtensionTests;
+				PRODUCT_NAME = TwoDoExtensionTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2FFB845B381A1C45B5E858FD /* Build configuration list for PBXNativeTarget "TwoDoExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E7BB7F4E175EF3ADBE1A32A /* Debug */,
+				3071DE6A5092D821EC0F5645 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B9ABE98976E4D743F848F441 /* Build configuration list for PBXProject "TwoDoExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B4D74C106DB8AC4F18162A7 /* Debug */,
+				7840999097DA131C5F0BF8F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D53E3E9ACC4A68D0AF80C293 /* Build configuration list for PBXNativeTarget "TwoDoExtensionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66FEFDFA35BD15244825D7EE /* Debug */,
+				AC7942F17590C98026360BC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4ACDDB9BAD1ADEB613E8F8CA /* XCRemoteSwiftPackageReference "TunaKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tunaformac/TunaKit";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.22.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A69727CA338FD72DB6DB510 /* TunaKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4ACDDB9BAD1ADEB613E8F8CA /* XCRemoteSwiftPackageReference "TunaKit" */;
+			productName = TunaKit;
+		};
+		9BA4A602462C1523A04F8884 /* TunaKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4ACDDB9BAD1ADEB613E8F8CA /* XCRemoteSwiftPackageReference "TunaKit" */;
+			productName = TunaKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 244210E48437B6556980A702 /* Project object */;
+}
