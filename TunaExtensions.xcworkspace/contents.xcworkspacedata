@@ -8,6 +8,9 @@
       location = "group:BrewExtension/BrewExtension.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:ChromeExtension/ChromeExtension.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:CleanShotExtension/CleanShotExtension.xcodeproj">
    </FileRef>
    <FileRef
@@ -45,6 +48,9 @@
    </FileRef>
    <FileRef
       location = "group:SafariExtension/SafariExtension.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:SpotifyExtension/SpotifyExtension.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:ThingsExtension/ThingsExtension.xcodeproj">

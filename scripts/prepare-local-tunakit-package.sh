@@ -28,18 +28,23 @@ fi
 echo "TunaExtensions root: $ROOT" >&2
 echo "Tuna root: $TUNA_ROOT" >&2
 
-package_versions="$(
-  find "$ROOT" -path "$ROOT/build" -prune -o \
-    -path '*/xcshareddata/swiftpm/Package.resolved' -print0 \
-    | xargs -0 jq -r '.pins[] | select(.identity == "tunakit") | .state.version' \
-    | sort -u
-)"
-if [[ -z "$package_versions" ]]; then
-  echo "Expected at least one extension to resolve a TunaKit package version." >&2
+project_files=()
+resolved_files=()
+for project in "$ROOT"/*/*.xcodeproj; do
+  [[ -d "$project" ]] || continue
+  project_files+=("$project/project.pbxproj")
+  resolved_file="$project/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+  [[ -f "$resolved_file" ]] && resolved_files+=("$resolved_file")
+done
+if [[ ${#resolved_files[@]} -eq 0 ]]; then
+  echo "Expected at least one extension Package.resolved." >&2
   exit 1
 fi
+package_versions="$(
+  "$ROOT/scripts/rewrite-local-tunakit-references.py" versions "${resolved_files[@]}" | sort -u
+)"
 
-xcodebuild build \
+"$ROOT/scripts/run-xcodebuild" build \
   -project "$TUNAKIT_PROJECT" \
   -scheme TunaKit \
   -configuration Debug \
@@ -62,7 +67,7 @@ esac
 rm -rf "$PACKAGE_ROOT"
 mkdir -p "$PACKAGE_ROOT"
 cp "$ROOT/scripts/local-tunakit-package/Package.swift" "$PACKAGE_ROOT/Package.swift"
-xcodebuild -create-xcframework \
+"$ROOT/scripts/run-xcodebuild" -create-xcframework \
   -framework "$framework" \
   -output "$PACKAGE_ROOT/TunaKit.xcframework" >&2
 
@@ -73,8 +78,8 @@ git -C "$PACKAGE_ROOT" add Package.swift TunaKit.xcframework
 git -C "$PACKAGE_ROOT" commit -qm "Build local TunaKit"
 minimum_versions="$({
   printf '%s\n' "$package_versions"
-  find "$ROOT" -path "$ROOT/build" -prune -o -name project.pbxproj -print0 \
-    | xargs -0 awk '/minimumVersion = [0-9]+\.[0-9]+\.[0-9]+;/ { gsub(";", "", $3); print $3 }'
+  awk '/minimumVersion = [0-9]+\.[0-9]+\.[0-9]+;/ { gsub(";", "", $3); print $3 }' \
+    "${project_files[@]}"
 } | sort -u)"
 while IFS= read -r version; do
   [[ -n "$version" ]] && git -C "$PACKAGE_ROOT" tag "$version"

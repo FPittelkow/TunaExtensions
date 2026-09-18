@@ -1,0 +1,24 @@
+{
+  "originHash": "kept-temporarily-by-xcode",
+  "pins": [
+    {
+      "identity": "other",
+      "kind": "remoteSourceControl",
+      "location": "https://example.com/Other",
+      "state": {
+        "revision": "other-revision",
+        "version": "2.0.0"
+      }
+    },
+    {
+      "identity": "tunakit",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/tunaformac/TunaKit",
+      "state": {
+        "revision": "old-v3-revision",
+        "version": "1.22.0"
+      }
+    }
+  ],
+  "version": 3
+}

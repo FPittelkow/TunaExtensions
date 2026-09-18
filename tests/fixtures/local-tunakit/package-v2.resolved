@@ -1,0 +1,14 @@
+{
+  "pins": [
+    {
+      "identity": "tunakit",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/tunaformac/TunaKit",
+      "state": {
+        "revision": "old-v2-revision",
+        "version": "1.21.3"
+      }
+    }
+  ],
+  "version": 2
+}

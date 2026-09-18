@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# Retain complete xcodebuild output while keeping interactive diagnostics concise.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+OUTPUT_FILE=""
+
+if [[ "${1:-}" == "--output" ]]; then
+  [[ $# -ge 3 ]] || { echo "Usage: $0 [--output FILE|-] [--] XCODEBUILD_ARGS..." >&2; exit 64; }
+  OUTPUT_FILE="$2"
+  shift 2
+fi
+if [[ "${1:-}" == "--" ]]; then
+  shift
+fi
+[[ $# -gt 0 ]] || { echo "Usage: $0 [--output FILE|-] [--] XCODEBUILD_ARGS..." >&2; exit 64; }
+
+LOG_DIR="${TUNA_XCODEBUILD_LOG_DIR:-$ROOT/build/xcodebuild}"
+mkdir -p "$LOG_DIR"
+label="${1#-}"
+safe_label="$(printf '%s' "$label" | tr -c '[:alnum:]-' '_')"
+log_file="$(mktemp "$LOG_DIR/xcodebuild-${safe_label:-command}_$(date +%Y-%m-%d-%H-%M-%S).XXXXXX")"
+
+use_xcsift=0
+case "$1" in
+  build|test|archive|analyze)
+    command -v xcsift >/dev/null 2>&1 && use_xcsift=1
+    ;;
+esac
+
+set +e
+if [[ "$use_xcsift" -eq 1 ]]; then
+  xcodebuild "$@" 2>&1 | tee "$log_file" | xcsift --format toon --exit-on-failure --quiet >&2
+  status="${PIPESTATUS[0]}"
+else
+  xcodebuild "$@" >"$log_file" 2>&1
+  status=$?
+fi
+set -e
+
+if [[ -n "$OUTPUT_FILE" && "$status" -eq 0 ]]; then
+  if [[ "$OUTPUT_FILE" == "-" ]]; then
+    cat "$log_file"
+  else
+    cp "$log_file" "$OUTPUT_FILE"
+  fi
+fi
+
+echo "xcodebuild log: $log_file" >&2
+if [[ "$status" -eq 0 ]]; then
+  echo "xcodebuild status: SUCCESS" >&2
+else
+  echo "xcodebuild status: FAILED (exit $status)" >&2
+  compiler_errors="$(grep -E -m 8 '(^|[[:space:]])error:|:[0-9]+:[0-9]+: error:' "$log_file" || true)"
+  if [[ -n "$compiler_errors" ]]; then
+    echo "First errors:" >&2
+    printf '%s\n' "$compiler_errors" | sed 's/^/  /' >&2
+  else
+    echo "Last 20 log lines:" >&2
+    tail -n 20 "$log_file" | sed 's/^/  /' >&2
+  fi
+fi
+
+exit "$status"

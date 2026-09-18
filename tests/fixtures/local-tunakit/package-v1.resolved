@@ -1,0 +1,15 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "TunaKit",
+        "repositoryURL": "https://github.com/tunaformac/TunaKit",
+        "state": {
+          "revision": "old-v1-revision",
+          "version": "1.18.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
